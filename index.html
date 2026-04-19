@@ -239,6 +239,7 @@ document.getElementById("form").addEventListener("submit", function(e) {
     text += `ID заявки: ${shortID}\n${now}`;
 
     const url = `https://wa.me/380994750678?text=${encodeURIComponent(text)}`;
+    document.getElementById("form").reset();
     window.location.href = url;
 });
 </script>
