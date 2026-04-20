@@ -239,10 +239,33 @@ document.getElementById("form").addEventListener("submit", function(e) {
     text += `ID заявки: ${shortID}\n${now}`;
 
     const url = `https://wa.me/380994750678?text=${encodeURIComponent(text)}`;
+    const scriptURL = "https://script.google.com/macros/s/AKfycbyN8r_nDF-b9U8ljwFiWkYcZlxwwY2kH7ojPtlzV5YQnza_zkybzOvNIbHYCvxVFs7iHQ/exec";
+
+const today = new Date();
+const formattedDate = today.toLocaleDateString("uk-UA");
+
+fetch(scriptURL, {
+    method: "POST",
+    body: JSON.stringify({
+        id: id,
+        unit: unit.value,
+        position: position.value,
+        coords: coords.value,
+        cargo: cargo.value,
+        dynamic: dynamicValue.value,
+        callsign: callsign.value,
+        phone: phone.value,
+        comment: comment.value,
+        date: formattedDate
+    })
+})
+.catch(() => {
+    alert("Помилка збереження в таблицю");
+});
     document.getElementById("form").reset();
     window.location.href = url;
 });
 </script>
 
 </body>
-  </html>
+</html>
