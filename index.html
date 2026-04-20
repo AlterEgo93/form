@@ -77,16 +77,22 @@ textarea {
     resize: vertical;
 }
 
-/* HIDDEN */
+/* HIDDEN & DYNAMIC BLOCKS */
 .hidden {
-    display: none;
+    display: none !important;
+}
+
+/* Вирівнювання внутрішніх елементів прихованих блоків */
+#dynamicBlock, #contactBlock {
+    display: flex;
+    flex-direction: column;
 }
 
 /* UNIFIED BUTTON STYLE */
 .btn {
     width: 100%;
     padding: 14px;
-    margin-top: 10px;
+    margin-top: 20px; /* Трохи збільшив відступ зверху для кнопки */
     border-radius: 8px;
     font-size: 16px;
     font-weight: bold;
@@ -107,6 +113,7 @@ button.btn {
 a.btn {
     background: #d4af37;
     color: #000;
+    margin-top: 10px;
 }
 </style>
 </head>
@@ -185,6 +192,18 @@ const callsign = document.getElementById("callsign");
 const phone = document.getElementById("phone");
 const comment = document.getElementById("comment");
 
+/* ENTER & AUTO navigation */
+function focusNext(el) {
+    // Шукаємо всі поля, які не мають класу hidden та не знаходяться всередині hidden батька
+    const inputs = Array.from(document.querySelectorAll("input, select, textarea"))
+        .filter(e => e.offsetParent !== null);
+
+    const index = inputs.indexOf(el);
+    if (inputs[index + 1]) {
+        inputs[index + 1].focus();
+    }
+}
+
 /* cargo logic */
 cargo.addEventListener("change", () => {
     const val = cargo.value;
@@ -198,6 +217,9 @@ cargo.addEventListener("change", () => {
         dynamicBlock.classList.remove("hidden");
         dynamicLabel.innerText = "Вага (кг)";
     }
+    
+    // Автоматичний перехід на наступне поле після вибору
+    focusNext(cargo);
 });
 
 /* contact show */
@@ -210,16 +232,7 @@ function generateID() {
     return Math.random().toString(36).substring(2, 10);
 }
 
-/* ENTER navigation */
-function focusNext(el) {
-    const inputs = Array.from(document.querySelectorAll("input, select, textarea"))
-        .filter(e => e.offsetParent !== null);
-
-    const index = inputs.indexOf(el);
-    if (inputs[index + 1]) inputs[index + 1].focus();
-}
-
-document.querySelectorAll("input, textarea").forEach(el => {
+document.querySelectorAll("input, textarea, select").forEach(el => {
     el.addEventListener("keydown", e => {
         if (e.key === "Enter") {
             e.preventDefault();
@@ -230,7 +243,7 @@ document.querySelectorAll("input, textarea").forEach(el => {
 
 window.onload = () => unit.focus();
 
-/* submit */
+/* submit logic */
 document.getElementById("form").addEventListener("submit", function(e) {
     e.preventDefault();
 
@@ -252,8 +265,10 @@ document.getElementById("form").addEventListener("submit", function(e) {
         add("Вага/Кількість", dynamicValue.value);
     }
 
-    if (callsign.value || phone.value) {
-        add("Контакт", `${callsign.value}; ${phone.value}`);
+    if (!contactBlock.classList.contains("hidden")) {
+        if (callsign.value || phone.value) {
+            add("Контакт", `${callsign.value}; ${phone.value}`);
+        }
     }
 
     add("Коментар", comment.value);
@@ -262,9 +277,7 @@ document.getElementById("form").addEventListener("submit", function(e) {
     text += `ID: ${shortID}\n${now}`;
 
     const url = `https://wa.me/380994750678?text=${encodeURIComponent(text)}`;
-
     const scriptURL = "https://script.google.com/macros/s/AKfycbyN8r_nDF-b9U8ljwFiWkYcZlxwwY2kH7ojPtlzV5YQnza_zkybzOvNIbHYCvxVFs7iHQ/exec";
-
     const formattedDate = new Date().toLocaleDateString("uk-UA");
 
     fetch(scriptURL, {
