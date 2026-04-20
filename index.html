@@ -6,6 +6,10 @@
 <title>Нова заявка</title>
 
 <style>
+* {
+    box-sizing: border-box;
+}
+
 body {
     margin: 0;
     font-family: Arial, sans-serif;
@@ -28,7 +32,7 @@ body {
     height: 24px;
 }
 
-/* CENTER LAYOUT */
+/* CENTER */
 .container {
     display: flex;
     justify-content: center;
@@ -65,43 +69,44 @@ input, select, textarea {
     background: #1a1a1a;
     color: #fff;
     font-size: 16px;
-    box-sizing: border-box;
 }
 
+/* TEXTAREA */
 textarea {
     min-height: 100px;
     resize: vertical;
 }
 
+/* HIDDEN */
 .hidden {
     display: none;
 }
 
-/* BUTTONS */
-button {
+/* UNIFIED BUTTON STYLE */
+.btn {
     width: 100%;
     padding: 14px;
-    margin-top: 15px;
-    border: none;
+    margin-top: 10px;
     border-radius: 8px;
     font-size: 16px;
-    background: #d4af37;
-    color: #000;
     font-weight: bold;
+    text-align: center;
+    display: block;
+    text-decoration: none;
     cursor: pointer;
 }
 
-.link-btn {
-    width: 100%;
-    display: block;
-    text-align: center;
-    margin-top: 10px;
-    padding: 12px;
-    border-radius: 8px;
+/* SUBMIT */
+button.btn {
+    border: none;
     background: #d4af37;
     color: #000;
-    text-decoration: none;
-    font-weight: bold;
+}
+
+/* LINK BUTTON */
+a.btn {
+    background: #d4af37;
+    color: #000;
 }
 </style>
 </head>
@@ -158,9 +163,9 @@ button {
 <label>Коментар</label>
 <textarea id="comment"></textarea>
 
-<button type="submit">Надіслати заявку</button>
+<button type="submit" class="btn">Надіслати заявку</button>
 
-<a class="link-btn" href="https://AlterEgo93.github.io/checkid">Перевірити статус</a>
+<a class="btn" href="https://AlterEgo93.github.io/checkid">Перевірити статус</a>
 
 </form>
 </div>
@@ -180,7 +185,7 @@ const callsign = document.getElementById("callsign");
 const phone = document.getElementById("phone");
 const comment = document.getElementById("comment");
 
-// логіка поля
+/* cargo logic */
 cargo.addEventListener("change", () => {
     const val = cargo.value;
 
@@ -193,21 +198,19 @@ cargo.addEventListener("change", () => {
         dynamicBlock.classList.remove("hidden");
         dynamicLabel.innerText = "Вага (кг)";
     }
-
-    focusNext(cargo);
 });
 
-// контакт блок
+/* contact show */
 position.addEventListener("input", () => {
     contactBlock.classList.toggle("hidden", position.value.trim() === "");
 });
 
-// ID
+/* ID */
 function generateID() {
     return Math.random().toString(36).substring(2, 10);
 }
 
-// навігація Enter
+/* ENTER navigation */
 function focusNext(el) {
     const inputs = Array.from(document.querySelectorAll("input, select, textarea"))
         .filter(e => e.offsetParent !== null);
@@ -225,10 +228,9 @@ document.querySelectorAll("input, textarea").forEach(el => {
     });
 });
 
-// старт
 window.onload = () => unit.focus();
 
-// submit
+/* submit */
 document.getElementById("form").addEventListener("submit", function(e) {
     e.preventDefault();
 
@@ -263,8 +265,7 @@ document.getElementById("form").addEventListener("submit", function(e) {
 
     const scriptURL = "https://script.google.com/macros/s/AKfycbyN8r_nDF-b9U8ljwFiWkYcZlxwwY2kH7ojPtlzV5YQnza_zkybzOvNIbHYCvxVFs7iHQ/exec";
 
-    const today = new Date();
-    const formattedDate = today.toLocaleDateString("uk-UA");
+    const formattedDate = new Date().toLocaleDateString("uk-UA");
 
     fetch(scriptURL, {
         method: "POST",
