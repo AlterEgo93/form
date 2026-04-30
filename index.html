@@ -297,7 +297,7 @@ document.getElementById("form").addEventListener("submit", function(e) {
             dynamic: dynamicValue.value,
             callsign: callsign.value,
             phone: "'"+phone.value,
-            comment: comment.value,
+            comment: "'"+comment.value,
             date: formattedDate
         })
     }).catch(() => {
