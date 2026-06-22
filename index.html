@@ -304,7 +304,7 @@ document.getElementById("form").addEventListener("submit", function(e) {
         body: JSON.stringify({
             id,
             unit: unit.value,
-            customerContact: customerContact.value, // нове поле
+            customerContact: "'"+customerContact.value, // нове поле
             position: position.value,
             coords: coords.value,
             cargo: cargo.value,
