@@ -296,6 +296,9 @@ document.getElementById("form").addEventListener("submit", function(e) {
 
     add("Контакт замовника", customerContact.value);
 
+    console.log("Контакт замовника:", customerContact.value);
+
+
     fetch(scriptURL, {
         method: "POST",
         body: JSON.stringify({
