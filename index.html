@@ -138,6 +138,10 @@ a.btn {
 <label class="required">Підрозділ</label>
 <input id="unit" required placeholder="Вкажіть тільки бригаду та батальйон">
 
+<label class="required">Контакт замовника</label>
+<input id="customerContact" required placeholder="Ваш номер телефону">
+
+
 
 <label>Позиція</label>
 <input id="position">
@@ -198,6 +202,7 @@ const coords = document.getElementById("coords");
 const callsign = document.getElementById("callsign");
 const phone = document.getElementById("phone");
 const comment = document.getElementById("comment");
+const customerContact = document.getElementById("customerContact");
 
 /* ENTER & AUTO navigation */
 function focusNext(el) {
@@ -287,11 +292,16 @@ document.getElementById("form").addEventListener("submit", function(e) {
     const scriptURL = "https://script.google.com/macros/s/AKfycbyN8r_nDF-b9U8ljwFiWkYcZlxwwY2kH7ojPtlzV5YQnza_zkybzOvNIbHYCvxVFs7iHQ/exec";
     const formattedDate = new Date().toLocaleDateString("uk-UA");
 
+    
+
+    add("Контакт замовника", customerContact.value);
+
     fetch(scriptURL, {
         method: "POST",
         body: JSON.stringify({
             id,
             unit: unit.value,
+            customerContact: customerContact.value, // нове поле
             position: position.value,
             coords: coords.value,
             cargo: cargo.value,
@@ -306,7 +316,10 @@ document.getElementById("form").addEventListener("submit", function(e) {
     });
 
     document.getElementById("form").reset();
+    alert(`Вашу заявку прийнято\nID заявки: ${shortID}\nВ разі змін до заявки, просимо проінформувати Чергового логістики ББНК`);
+
     window.location.href = url;
+
 });
 </script>
 
