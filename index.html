@@ -193,10 +193,8 @@ const cargo = document.getElementById("cargo");
 const dynamicBlock = document.getElementById("dynamicBlock");
 const dynamicLabel = document.getElementById("dynamicLabel");
 const dynamicValue = document.getElementById("dynamicValue");
-
 const position = document.getElementById("position");
 const contactBlock = document.getElementById("contactBlock");
-
 const unit = document.getElementById("unit");
 const coords = document.getElementById("coords");
 const callsign = document.getElementById("callsign");
@@ -204,22 +202,17 @@ const phone = document.getElementById("phone");
 const comment = document.getElementById("comment");
 const customerContact = document.getElementById("customerContact");
 
-/* ENTER & AUTO navigation */
 function focusNext(el) {
-    // Шукаємо всі поля, які не мають класу hidden та не знаходяться всередині hidden батька
     const inputs = Array.from(document.querySelectorAll("input, select, textarea"))
         .filter(e => e.offsetParent !== null);
-
     const index = inputs.indexOf(el);
     if (inputs[index + 1]) {
         inputs[index + 1].focus();
     }
 }
 
-/* cargo logic */
 cargo.addEventListener("change", () => {
     const val = cargo.value;
-
     if (val === "Евак 300" || val === "Евак 200") {
         dynamicBlock.classList.remove("hidden");
         dynamicLabel.innerText = "Кількість в/с";
@@ -229,17 +222,13 @@ cargo.addEventListener("change", () => {
         dynamicBlock.classList.remove("hidden");
         dynamicLabel.innerText = "Вага (кг)";
     }
-    
-    // Автоматичний перехід на наступне поле після вибору
     focusNext(cargo);
 });
 
-/* contact show */
 position.addEventListener("input", () => {
     contactBlock.classList.toggle("hidden", position.value.trim() === "");
 });
 
-/* ID */
 function generateID() {
     return Math.random().toString(36).substring(2, 10);
 }
@@ -255,15 +244,33 @@ document.querySelectorAll("input, textarea, select").forEach(el => {
 
 window.onload = () => unit.focus();
 
-/* submit logic */
-document.getElementById("form").addEventListener("submit", function(e) {
+// ФУНКЦІЯ ПОВТОРНИХ СПРОБ
+async function fetchWithRetry(url, options, retries = 5, backoff = 2000) {
+    for (let i = 0; i < retries; i++) {
+        try {
+            // mode: "no-cors" допомагає уникнути проблем з CORS у Google Script
+            const response = await fetch(url, { ...options, mode: 'no-cors' });
+            return response; 
+        } catch (err) {
+            console.warn(`Спроба ${i+1} невдала. Повтор через ${backoff}мс...`);
+            if (i === retries - 1) throw err;
+            await new Promise(r => setTimeout(r, backoff));
+            backoff *= 1.5; // збільшуємо час очікування
+        }
+    }
+}
+
+document.getElementById("form").addEventListener("submit", async function(e) {
     e.preventDefault();
+    
+    // Блокуємо кнопку, щоб не клацали двічі
+    const submitBtn = document.querySelector('button[type="submit"]');
+    submitBtn.disabled = true;
+    submitBtn.innerText = "Зберігаємо у таблицю...";
 
     const id = generateID();
     const shortID = id.slice(-3);
-
     let text = "";
-
     const add = (label, value) => {
         if (value) text += `${label}: ${value}\n`;
     };
@@ -272,59 +279,55 @@ document.getElementById("form").addEventListener("submit", function(e) {
     add("Позиція", position.value);
     add("Координати", coords.value);
     add("Що веземо", cargo.value);
-
     if (!dynamicBlock.classList.contains("hidden") && dynamicValue.value) {
         add("Вага/Кількість", dynamicValue.value);
     }
-
-    if (!contactBlock.classList.contains("hidden")) {
-        if (callsign.value || phone.value) {
-            add("Контакт", `${callsign.value}; ${phone.value}`);
-        }
+    if (!contactBlock.classList.contains("hidden") && (callsign.value || phone.value)) {
+        add("Контакт", `${callsign.value}; ${phone.value}`);
     }
-
     add("Коментар", comment.value);
+    add("Контакт замовника", customerContact.value);
 
     const now = new Date().toLocaleTimeString("uk-UA");
     text += `ID: ${shortID}\n${now}`;
-
-    const url = `https://wa.me/380995831724?text=${encodeURIComponent(text)}`;
+    
     const scriptURL = "https://script.google.com/macros/s/AKfycbyN8r_nDF-b9U8ljwFiWkYcZlxwwY2kH7ojPtlzV5YQnza_zkybzOvNIbHYCvxVFs7iHQ/exec";
     const formattedDate = new Date().toLocaleDateString("uk-UA");
 
-    
+    const payload = {
+        id,
+        unit: unit.value,
+        customerContact: "'" + customerContact.value,
+        position: position.value,
+        coords: coords.value,
+        cargo: cargo.value,
+        dynamic: dynamicValue.value,
+        callsign: callsign.value,
+        phone: "'" + phone.value,
+        comment: "'" + comment.value,
+        date: formattedDate
+    };
 
-    add("Контакт замовника", customerContact.value);
+    try {
+        // Викликаємо функцію з повторами
+        await fetchWithRetry(scriptURL, {
+            method: "POST",
+            body: JSON.stringify(payload)
+        });
 
-    console.log("Контакт замовника:", customerContact.value);
+        // Тільки після успішного запису (або після всіх спроб)
+        alert(`Вашу заявку прийнято\nID заявки: ${shortID}\nДані збережено.`);
+        
+        const waURL = `https://wa.me/380995831724?text=${encodeURIComponent(text)}`;
+        document.getElementById("form").reset();
+        window.location.href = waURL;
 
-
-    fetch(scriptURL, {
-        method: "POST",
-        body: JSON.stringify({
-            id,
-            unit: unit.value,
-            customerContact: "'"+customerContact.value, // нове поле
-            position: position.value,
-            coords: coords.value,
-            cargo: cargo.value,
-            dynamic: dynamicValue.value,
-            callsign: callsign.value,
-            phone: "'"+phone.value,
-            comment: "'"+comment.value,
-            date: formattedDate
-        })
-    }).catch(() => {
-        alert("Помилка збереження в таблицю");
-    });
-
-    document.getElementById("form").reset();
-    alert(`Вашу заявку прийнято\nID заявки: ${shortID}\nВ разі змін до заявки, просимо проінформувати Чергового логістики ББНК`);
-
-    window.location.href = url;
-
+    } catch (error) {
+        alert("На жаль, не вдалося зберегти дані в таблицю навіть після кількох спроб. Перевірте зв'язок.");
+        submitBtn.disabled = false;
+        submitBtn.innerText = "Надіслати заявку";
+    }
 });
 </script>
-
 </body>
 </html>
