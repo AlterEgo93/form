@@ -1,129 +1,113 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Нова заявка</title>
-
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="manifest" href="/site.webmanifest">
-    
-
-<style>
-* {
-    box-sizing: border-box;
-}
-
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #0f0f0f;
-    color: #fff;
-}
-
-/* HEADER */
-.header {
-    padding: 15px;
-    background: #1a1a1a;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 20px;
-    font-weight: bold;
-}
-
-.logo {
-    height: 24px;
-}
-
-/* CENTER */
-.container {
-    display: flex;
-    justify-content: center;
-    padding: 20px 10px;
-}
-
-/* FORM */
-form {
-    width: 100%;
-    max-width: 320px;
-    display: flex;
-    flex-direction: column;
-}
-
-/* LABELS */
-label {
-    margin: 15px 0 5px;
-    color: #ccc;
-    align-self: flex-start;
-}
-
-.required::after {
-    content: "*";
-    color: #d4af37;
-    margin-left: 4px;
-}
-
-/* INPUTS */
-input, select, textarea {
-    width: 100%;
-    padding: 12px;
-    border-radius: 6px;
-    border: 1px solid #333;
-    background: #1a1a1a;
-    color: #fff;
-    font-size: 16px;
-}
-
-/* TEXTAREA */
-textarea {
-    min-height: 100px;
-    resize: vertical;
-}
-
-/* HIDDEN & DYNAMIC BLOCKS */
-.hidden {
-    display: none !important;
-}
-
-/* Вирівнювання внутрішніх елементів прихованих блоків */
-#dynamicBlock, #contactBlock {
-    display: flex;
-    flex-direction: column;
-}
-
-/* UNIFIED BUTTON STYLE */
-.btn {
-    width: 100%;
-    padding: 14px;
-    margin-top: 20px; /* Трохи збільшив відступ зверху для кнопки */
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: bold;
-    text-align: center;
-    display: block;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-/* SUBMIT */
-button.btn {
-    border: none;
-    background: #d4af37;
-    color: #000;
-}
-
-/* LINK BUTTON */
-a.btn {
-    background: #d4af37;
-    color: #000;
-    margin-top: 10px;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Нова заявка</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #0f0f0f;
+            color: #fff;
+        }
+        /* HEADER */
+        .header {
+            padding: 15px;
+            background: #1a1a1a;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .logo {
+            height: 24px;
+        }
+        /* CENTER */
+        .container {
+            display: flex;
+            justify-content: center;
+            padding: 20px 10px;
+        }
+        /* FORM */
+        form {
+            width: 100%;
+            max-width: 320px;
+            display: flex;
+            flex-direction: column;
+        }
+        /* LABELS */
+        label {
+            margin: 15px 0 5px;
+            color: #ccc;
+            align-self: flex-start;
+        }
+        .required::after {
+            content: "*";
+            color: #d4af37;
+            margin-left: 4px;
+        }
+        /* INPUTS */
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid #333;
+            background: #1a1a1a;
+            color: #fff;
+            font-size: 16px;
+        }
+        /* TEXTAREA */
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        /* HIDDEN & DYNAMIC BLOCKS */
+        .hidden {
+            display: none !important;
+        }
+        #dynamicBlock, #contactBlock {
+            display: flex;
+            flex-direction: column;
+        }
+        /* UNIFIED BUTTON STYLE */
+        .btn {
+            width: 100%;
+            padding: 14px;
+            margin-top: 20px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            display: block;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button.btn {
+            border: none;
+            background: #d4af37;
+            color: #000;
+        }
+        button.btn:disabled {
+            background: #7a6521;
+            cursor: not-allowed;
+        }
+        a.btn {
+            background: #d4af37;
+            color: #000;
+            margin-top: 10px;
+        }
+    </style>
 </head>
-
 <body>
 
 <div class="header">
@@ -132,202 +116,216 @@ a.btn {
 </div>
 
 <div class="container">
+    <form id="form">
+        <label class="required">Підрозділ</label>
+        <input id="unit" required placeholder="Вкажіть тільки бригаду та батальйон">
 
-<form id="form">
+        <label class="required">Контакт замовника</label>
+        <input id="customerContact" required placeholder="Ваш номер телефону">
 
-<label class="required">Підрозділ</label>
-<input id="unit" required placeholder="Вкажіть тільки бригаду та батальйон">
+        <label>Позиція</label>
+        <input id="position">
 
-<label class="required">Контакт замовника</label>
-<input id="customerContact" required placeholder="Ваш номер телефону">
+        <label class="required">Координати</label>
+        <input id="coords" required>
 
+        <label class="required">Що веземо</label>
+        <select id="cargo" required>
+            <option value="" disabled selected hidden>Оберіть варіант</option>
+            <option>Доставка Паливо, Їжа, Вода</option>
+            <option>БК</option>
+            <option>Евак 300</option>
+            <option>Евак 200</option>
+            <option>Евак НРК</option>
+            <option>ЕВАК БПЛА</option>
+            <option>Доставка БПЛА</option>
+            <option>Колоди</option>
+            <option>Вивезти з позиції</option>
+            <option>Обладнання</option>
+            <option>інше</option>
+        </select>
 
+        <div id="dynamicBlock" class="hidden">
+            <label id="dynamicLabel"></label>
+            <input type="number" id="dynamicValue">
+        </div>
 
-<label>Позиція</label>
-<input id="position">
+        <div id="contactBlock" class="hidden">
+            <label>Позивний бійця на позиції</label>
+            <input id="callsign">
+            <label>Телефон на позиції</label>
+            <input id="phone">
+        </div>
 
-<label class="required">Координати</label>
-<input id="coords" required>
+        <label>Коментар</label>
+        <textarea id="comment"></textarea>
 
-<label class="required">Що веземо</label>
-<select id="cargo" required>
-    <option value="" disabled selected hidden>Оберіть варіант</option>
-    <option>Доставка Паливо, Їжа, Вода</option>
-    <option>БК</option>
-    <option>Евак 300</option>
-    <option>Евак 200</option>
-    <option>Евак НРК</option>
-    <option>ЕВАК БПЛА</option>
-    <option>Доставка БПЛА</option>
-    <option>Колоди</option>
-    <option>Вивезти з позиції</option>
-    <option>Обладнання</option>
-    <option>інше</option>
-</select>
-
-<div id="dynamicBlock" class="hidden">
-    <label id="dynamicLabel"></label>
-    <input type="number" id="dynamicValue">
-</div>
-
-<div id="contactBlock" class="hidden">
-    <label>Позивний бійця на позиції</label>
-    <input id="callsign">
-
-    <label>Телефон на позиції</label>
-    <input id="phone">
-</div>
-
-<label>Коментар</label>
-<textarea id="comment"></textarea>
-
-<button type="submit" class="btn">Надіслати заявку</button>
-
-<a class="btn" href="https://AlterEgo93.github.io/checkid">Перевірити статус</a>
-
-</form>
+        <button type="submit" class="btn">Надіслати заявку</button>
+        <a class="btn" href="https://AlterEgo93.github.io/checkid">Перевірити статус</a>
+    </form>
 </div>
 
 <script>
-const cargo = document.getElementById("cargo");
-const dynamicBlock = document.getElementById("dynamicBlock");
-const dynamicLabel = document.getElementById("dynamicLabel");
-const dynamicValue = document.getElementById("dynamicValue");
-const position = document.getElementById("position");
-const contactBlock = document.getElementById("contactBlock");
-const unit = document.getElementById("unit");
-const coords = document.getElementById("coords");
-const callsign = document.getElementById("callsign");
-const phone = document.getElementById("phone");
-const comment = document.getElementById("comment");
-const customerContact = document.getElementById("customerContact");
+    const cargo = document.getElementById("cargo");
+    const dynamicBlock = document.getElementById("dynamicBlock");
+    const dynamicLabel = document.getElementById("dynamicLabel");
+    const dynamicValue = document.getElementById("dynamicValue");
+    const position = document.getElementById("position");
+    const contactBlock = document.getElementById("contactBlock");
+    const unit = document.getElementById("unit");
+    const coords = document.getElementById("coords");
+    const callsign = document.getElementById("callsign");
+    const phone = document.getElementById("phone");
+    const comment = document.getElementById("comment");
+    const customerContact = document.getElementById("customerContact");
 
-function focusNext(el) {
-    const inputs = Array.from(document.querySelectorAll("input, select, textarea"))
-        .filter(e => e.offsetParent !== null);
-    const index = inputs.indexOf(el);
-    if (inputs[index + 1]) {
-        inputs[index + 1].focus();
+    // Функція переходу до наступного поля
+    function focusNext(el) {
+        const inputs = Array.from(document.querySelectorAll("input, select, textarea"))
+            .filter(e => e.offsetParent !== null);
+        const index = inputs.indexOf(el);
+        if (inputs[index + 1]) {
+            inputs[index + 1].focus();
+        }
     }
-}
 
-cargo.addEventListener("change", () => {
-    const val = cargo.value;
-    if (val === "Евак 300" || val === "Евак 200") {
-        dynamicBlock.classList.remove("hidden");
-        dynamicLabel.innerText = "Кількість в/с";
-    } else if (val === "Евак НРК" || val === "ЕВАК БПЛА" || val === "") {
-        dynamicBlock.classList.add("hidden");
-    } else {
-        dynamicBlock.classList.remove("hidden");
-        dynamicLabel.innerText = "Вага (кг)";
+    // Логіка вибору вантажу
+    cargo.addEventListener("change", () => {
+        const val = cargo.value;
+        if (val === "Евак 300" || val === "Евак 200") {
+            dynamicBlock.classList.remove("hidden");
+            dynamicLabel.innerText = "Кількість в/с";
+        } else if (val === "Евак НРК" || val === "ЕВАК БПЛА" || val === "") {
+            dynamicBlock.classList.add("hidden");
+        } else {
+            dynamicBlock.classList.remove("hidden");
+            dynamicLabel.innerText = "Вага (кг)";
+        }
+        focusNext(cargo);
+    });
+
+    // Показ контактного блоку
+    position.addEventListener("input", () => {
+        contactBlock.classList.toggle("hidden", position.value.trim() === "");
+    });
+
+    function generateID() {
+        return Math.random().toString(36).substring(2, 10);
     }
-    focusNext(cargo);
-});
 
-position.addEventListener("input", () => {
-    contactBlock.classList.toggle("hidden", position.value.trim() === "");
-});
+    // Обробка Enter
+    document.querySelectorAll("input, textarea, select").forEach(el => {
+        el.addEventListener("keydown", e => {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                focusNext(el);
+            }
+        });
+    });
 
-function generateID() {
-    return Math.random().toString(36).substring(2, 10);
-}
+    window.onload = () => unit.focus();
 
-document.querySelectorAll("input, textarea, select").forEach(el => {
-    el.addEventListener("keydown", e => {
-        if (e.key === "Enter") {
-            e.preventDefault();
-            focusNext(el);
+    // ФУНКЦІЯ ПОВТОРНИХ СПРОБ
+    async function fetchWithRetry(url, options, retries = 5, backoff = 2000) {
+        for (let i = 0; i < retries; i++) {
+            try {
+                // mode: 'no-cors' для уникнення проблем з Google Script
+                const response = await fetch(url, { ...options, mode: 'no-cors' });
+                return response; 
+            } catch (err) {
+                console.warn(`Спроба ${i+1} невдала. Повтор за ${backoff}мс...`);
+                if (i === retries - 1) throw err;
+                await new Promise(r => setTimeout(r, backoff));
+                backoff *= 1.5;
+            }
+        }
+    }
+
+    // ЛОГІКА ВІДПРАВКИ
+    document.getElementById("form").addEventListener("submit", async function(e) {
+        e.preventDefault();
+        
+        const submitBtn = document.querySelector('button[type="submit"]');
+        const originalText = "Надіслати заявку";
+        
+        // 1. Блокуємо кнопку
+        submitBtn.disabled = true;
+
+        // 2. Анімація крапок
+        let dots = 0;
+        const animationInterval = setInterval(() => {
+            dots = (dots + 1) % 4;
+            submitBtn.innerText = "Зберігаємо в таблицю" + ".".repeat(dots);
+        }, 500);
+
+        const id = generateID();
+        const shortID = id.slice(-3);
+        let text = "";
+        const add = (label, value) => {
+            if (value) text += `${label}: ${value}\n`;
+        };
+
+        add("Підрозділ", unit.value);
+        add("Позиція", position.value);
+        add("Координати", coords.value);
+        add("Що веземо", cargo.value);
+        if (!dynamicBlock.classList.contains("hidden") && dynamicValue.value) {
+            add("Вага/Кількість", dynamicValue.value);
+        }
+        if (!contactBlock.classList.contains("hidden") && (callsign.value || phone.value)) {
+            add("Контакт", `${callsign.value}; ${phone.value}`);
+        }
+        add("Коментар", comment.value);
+        add("Контакт замовника", customerContact.value);
+
+        const now = new Date().toLocaleTimeString("uk-UA");
+        text += `ID: ${shortID}\n${now}`;
+        
+        const scriptURL = "https://script.google.com/macros/s/AKfycbyN8r_nDF-b9U8ljwFiWkYcZlxwwY2kH7ojPtlzV5YQnza_zkybzOvNIbHYCvxVFs7iHQ/exec";
+        const formattedDate = new Date().toLocaleDateString("uk-UA");
+
+        const payload = {
+            id,
+            unit: unit.value,
+            customerContact: "'" + customerContact.value,
+            position: position.value,
+            coords: coords.value,
+            cargo: cargo.value,
+            dynamic: dynamicValue.value,
+            callsign: callsign.value,
+            phone: "'" + phone.value,
+            comment: "'" + comment.value,
+            date: formattedDate
+        };
+
+        try {
+            // 3. Відправляємо дані з механізмом повторів
+            await fetchWithRetry(scriptURL, {
+                method: "POST",
+                body: JSON.stringify(payload)
+            });
+
+            // 4. Успіх: зупиняємо анімацію та повертаємо текст
+            clearInterval(animationInterval);
+            submitBtn.innerText = originalText;
+            submitBtn.disabled = false;
+
+            alert(`Вашу заявку прийнято\nID заявки: ${shortID}\nВ разі змін до заявки, просимо проінформувати Чергового логістики ББНК`);
+            
+            const waURL = `https://wa.me/380995831724?text=${encodeURIComponent(text)}`;
+            document.getElementById("form").reset();
+            window.location.href = waURL;
+
+        } catch (error) {
+            // 5. Помилка: зупиняємо анімацію та повертаємо кнопку в активний стан
+            clearInterval(animationInterval);
+            submitBtn.innerText = originalText;
+            submitBtn.disabled = false;
+            
+            alert("Помилка збереження в таблицю. Перевірте з'єднання та спробуйте ще раз.");
         }
     });
-});
-
-window.onload = () => unit.focus();
-
-// ФУНКЦІЯ ПОВТОРНИХ СПРОБ
-async function fetchWithRetry(url, options, retries = 5, backoff = 2000) {
-    for (let i = 0; i < retries; i++) {
-        try {
-            // mode: "no-cors" допомагає уникнути проблем з CORS у Google Script
-            const response = await fetch(url, { ...options, mode: 'no-cors' });
-            return response; 
-        } catch (err) {
-            console.warn(`Спроба ${i+1} невдала. Повтор через ${backoff}мс...`);
-            if (i === retries - 1) throw err;
-            await new Promise(r => setTimeout(r, backoff));
-            backoff *= 1.5; // збільшуємо час очікування
-        }
-    }
-}
-
-document.getElementById("form").addEventListener("submit", async function(e) {
-    e.preventDefault();
-    
-    // Блокуємо кнопку, щоб не клацали двічі
-    const submitBtn = document.querySelector('button[type="submit"]');
-    submitBtn.disabled = true;
-    submitBtn.innerText = "Зберігаємо у таблицю...";
-
-    const id = generateID();
-    const shortID = id.slice(-3);
-    let text = "";
-    const add = (label, value) => {
-        if (value) text += `${label}: ${value}\n`;
-    };
-
-    add("Підрозділ", unit.value);
-    add("Позиція", position.value);
-    add("Координати", coords.value);
-    add("Що веземо", cargo.value);
-    if (!dynamicBlock.classList.contains("hidden") && dynamicValue.value) {
-        add("Вага/Кількість", dynamicValue.value);
-    }
-    if (!contactBlock.classList.contains("hidden") && (callsign.value || phone.value)) {
-        add("Контакт", `${callsign.value}; ${phone.value}`);
-    }
-    add("Коментар", comment.value);
-    add("Контакт замовника", customerContact.value);
-
-    const now = new Date().toLocaleTimeString("uk-UA");
-    text += `ID: ${shortID}\n${now}`;
-    
-    const scriptURL = "https://script.google.com/macros/s/AKfycbyN8r_nDF-b9U8ljwFiWkYcZlxwwY2kH7ojPtlzV5YQnza_zkybzOvNIbHYCvxVFs7iHQ/exec";
-    const formattedDate = new Date().toLocaleDateString("uk-UA");
-
-    const payload = {
-        id,
-        unit: unit.value,
-        customerContact: "'" + customerContact.value,
-        position: position.value,
-        coords: coords.value,
-        cargo: cargo.value,
-        dynamic: dynamicValue.value,
-        callsign: callsign.value,
-        phone: "'" + phone.value,
-        comment: "'" + comment.value,
-        date: formattedDate
-    };
-
-    try {
-        // Викликаємо функцію з повторами
-        await fetchWithRetry(scriptURL, {
-            method: "POST",
-            body: JSON.stringify(payload)
-        });
-
-        // Тільки після успішного запису (або після всіх спроб)
-        alert(`Вашу заявку прийнято\nID заявки: ${shortID}\nВ разі змін до заявки, просимо проінформувати Чергового логістики ББНК`);
-        
-        const waURL = `https://wa.me/380995831724?text=${encodeURIComponent(text)}`;
-        document.getElementById("form").reset();
-        window.location.href = waURL;
-
-    } catch (error) {
-        alert("На жаль, не вдалося зберегти дані в таблицю навіть після кількох спроб. Перевірте зв'язок.");
-        submitBtn.disabled = false;
-        submitBtn.innerText = "Надіслати заявку";
-    }
-});
 </script>
+
 </body>
 </html>
